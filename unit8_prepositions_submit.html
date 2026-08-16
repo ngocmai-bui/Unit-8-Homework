@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 8 · Prepositions of Time & Place</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --navy:#0b1d33; --navy-2:#122c4a; --amber:#f2a93b; --amber-dim:#c9832a;
+    --cream:#f4efe4; --split-bg:#17233a; --split-line:#08111f;
+    --ok:#6fbf8b; --err:#d9695a;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Space Grotesk',sans-serif;
+    background: radial-gradient(circle at 20% 0%, #16305a 0%, var(--navy) 55%) fixed;
+    color: var(--cream); padding: 40px 16px 80px;
+  }
+  .board{ max-width:880px; margin:0 auto; }
+
+  header.top{ text-align:center; margin-bottom:28px; }
+  header.top .eyebrow{
+    font-family:'IBM Plex Mono',monospace; letter-spacing:.35em; font-size:11px;
+    color:var(--amber); text-transform:uppercase;
+  }
+  header.top h1{ font-size:34px; margin:10px 0 6px; font-weight:700; letter-spacing:.02em; }
+  header.top p{ color:#b9c4d6; font-size:14px; margin:0; }
+  header.top .rule{ width:60px; height:3px; background:var(--amber); margin:18px auto 0; border-radius:2px; }
+
+  .name-card{
+    background: var(--navy-2); border:1px solid #24406a; border-radius:12px;
+    padding:18px 20px; margin-bottom:24px;
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .name-card label{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--amber);
+    letter-spacing:.1em; text-transform:uppercase;
+  }
+  .name-card input[type=text]{
+    flex:1; min-width:200px;
+    background:var(--split-bg); border:1px solid #2c4470; border-radius:8px;
+    padding:10px 12px; color:var(--cream); font-family:'Space Grotesk',sans-serif; font-size:15px;
+  }
+  .name-card input[type=text]:focus{ outline:none; border-color:var(--amber); }
+
+  .progress-wrap{
+    display:flex; align-items:center; gap:12px; background:var(--navy-2);
+    border:1px solid #24406a; border-radius:10px; padding:12px 18px; margin-bottom:26px;
+    font-family:'IBM Plex Mono',monospace; font-size:12px;
+  }
+  .progress-bar{ flex:1; height:6px; background:#0a1930; border-radius:4px; overflow:hidden; }
+  .progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--amber-dim),var(--amber)); transition:width .3s ease; }
+  #progressLabel{ white-space:nowrap; color:#cfd9ea; }
+
+  section.exercise{
+    background:var(--navy-2); border:1px solid #24406a; border-radius:14px;
+    padding:24px 24px 28px; margin-bottom:22px;
+  }
+  .ex-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:14px; }
+  .ex-letter{
+    font-family:'IBM Plex Mono',monospace; background:var(--amber); color:var(--navy);
+    font-weight:700; font-size:14px; width:28px; height:28px;
+    display:flex; align-items:center; justify-content:center; border-radius:6px; flex-shrink:0;
+  }
+  .ex-instructions{ font-size:14.5px; color:#d7e0ef; }
+
+  ol.items{ list-style:none; margin:0; padding:0; }
+  li.item{
+    display:flex; align-items:baseline; gap:10px; padding:9px 0;
+    border-bottom:1px dashed #23395c; font-size:15px; line-height:1.6;
+  }
+  li.item:last-child{ border-bottom:none; }
+  .item-num{ font-family:'IBM Plex Mono',monospace; color:#7f95b9; font-size:12px; width:18px; flex-shrink:0; padding-top:4px; }
+  .item-text{ flex:1; }
+
+  .blank-input{
+    width: 80px;
+    height: 30px;
+    padding: 0 8px;
+    background: var(--split-bg);
+    border: 1px solid #2c4470;
+    border-bottom: 2px solid var(--split-line);
+    border-radius: 5px;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--cream);
+    text-align:center;
+    vertical-align:-7px;
+    transition: border-color .15s ease, background .2s ease;
+  }
+  .blank-input:focus{ outline:none; border-color:var(--amber); }
+  .blank-input.correct{ border-color:var(--ok); background:rgba(111,191,139,0.12); color:var(--ok); }
+  .blank-input.wrong{ border-color:var(--err); background:rgba(217,105,90,0.12); color:var(--err); text-decoration:line-through; }
+  .correct-tag{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600;
+    color:var(--ok); margin-left:6px; display:none;
+  }
+  .correct-tag.show{ display:inline; }
+
+  .choice-pair{ display:inline-flex; gap:6px; vertical-align:middle; }
+  .choice{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;
+    padding:4px 12px; border-radius:20px; border:1px solid #2c4470;
+    background:var(--split-bg); color:#9fb0cf; cursor:pointer; transition:all .18s ease;
+  }
+  .choice:hover{ border-color:var(--amber-dim); }
+  .choice.selected{ border-color:var(--amber); color:var(--amber); background:#1c2c4d; }
+  .choice.correct-final{ border-color:var(--ok); color:var(--ok); background:rgba(111,191,139,0.15); }
+  .choice.wrong-final{ border-color:var(--err); color:var(--err); background:rgba(217,105,90,0.15); text-decoration:line-through; }
+  .choice.locked{ cursor:default; }
+
+  .passage{ font-size:15px; line-height:2.3; }
+  .passage h3{
+    font-family:'IBM Plex Mono',monospace; letter-spacing:.15em; text-transform:uppercase;
+    font-size:13px; color:var(--amber); margin-bottom:12px;
+  }
+
+  .submit-bar{
+    position: sticky; bottom: 16px;
+    display:flex; justify-content:center; gap:12px; margin-top:20px;
+    flex-wrap:wrap;
+  }
+  button.primary-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:600;
+    background:var(--amber); color:var(--navy); border:none;
+    padding:14px 30px; border-radius:10px; cursor:pointer;
+    box-shadow: 0 6px 18px rgba(242,169,59,0.25);
+    transition: transform .15s ease;
+  }
+  button.primary-btn:hover{ transform: translateY(-1px); }
+  button.primary-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+
+  button.tool-btn{
+    font-family:'IBM Plex Mono',monospace; font-size:12px;
+    background:var(--navy-2); border:1px solid #2c4470; color:var(--cream);
+    padding:12px 18px; border-radius:9px; cursor:pointer; transition:all .18s ease;
+  }
+  button.tool-btn:hover{ border-color:var(--amber); color:var(--amber); }
+
+  .result-banner{
+    display:none;
+    background: var(--navy-2); border:1px solid var(--amber-dim); border-radius:12px;
+    padding:18px 20px; margin-bottom:24px; text-align:center;
+  }
+  .result-banner.show{ display:block; }
+  .result-banner .score{ font-size:28px; font-weight:700; color:var(--amber); font-family:'IBM Plex Mono',monospace; }
+  .result-banner .sub{ font-size:13px; color:#b9c4d6; margin-top:4px; }
+  .storage-note{
+    font-size:11.5px; color:#7f95b9; margin-top:8px; font-family:'IBM Plex Mono',monospace;
+  }
+
+  .teacher-toggle{
+    text-align:center; margin-top:34px;
+  }
+  .teacher-toggle a{
+    font-family:'IBM Plex Mono',monospace; font-size:11px; color:#5c729a;
+    cursor:pointer; text-decoration:underline;
+  }
+  .teacher-panel{
+    display:none; margin-top:16px; background:var(--navy-2); border:1px solid #24406a;
+    border-radius:14px; padding:20px;
+  }
+  .teacher-panel.show{ display:block; }
+  .teacher-panel h2{ font-size:16px; margin:0 0 12px; color:var(--amber); }
+  .sub-list{ font-size:13px; }
+  .sub-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 12px; border-bottom:1px dashed #23395c; cursor:pointer;
+  }
+  .sub-row:hover{ background:#0f2038; }
+  .sub-row .name{ font-weight:600; }
+  .sub-row .meta{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:#9fb0cf; }
+  .sub-detail{ display:none; padding: 10px 12px 4px; font-size:12.5px; color:#cfd9ea; }
+  .sub-detail.show{ display:block; }
+  .sub-detail .wrong-line{ color: var(--err); }
+  .sub-detail .ok-line{ color: var(--ok); }
+
+  footer.note{ text-align:center; font-size:12px; color:#7f95b9; margin-top:22px; font-family:'IBM Plex Mono',monospace; }
+
+  @media (max-width:520px){
+    header.top h1{ font-size:26px; }
+    section.exercise{ padding:18px 16px 22px; }
+    li.item{ font-size:14px; }
+    .blank-input{ width:64px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header class="top">
+    <div class="eyebrow">Departures · Grammar Practice</div>
+    <h1>AT · IN · ON · TO</h1>
+    <p>Unit 8 — Điền tên, làm bài, rồi nhấn "Nộp bài" để xem điểm và đáp án đúng.</p>
+    <div class="rule"></div>
+  </header>
+
+  <div class="name-card">
+    <label for="studentName">Họ tên học sinh</label>
+    <input type="text" id="studentName" placeholder="Nhập tên của bạn...">
+  </div>
+
+  <div class="result-banner" id="resultBanner">
+    <div class="score" id="scoreText">0 / 0</div>
+    <div class="sub" id="resultSub">Đáp án đúng đã được hiện bên cạnh mỗi câu.</div>
+    <div class="storage-note" id="storageNote"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <span id="progressLabel">0 / 0 đã điền</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <section class="exercise" id="secA">
+    <div class="ex-head"><span class="ex-letter">A</span>
+      <span class="ex-instructions">Nếu từ in đậm đúng, gõ lại chính từ đó. Nếu sai, gõ từ đúng thay thế.</span></div>
+    <ol class="items" id="listA"></ol>
+  </section>
+
+  <section class="exercise" id="secB">
+    <div class="ex-head"><span class="ex-letter">B</span>
+      <span class="ex-instructions">Hoàn thành bằng <em>on, in</em> hoặc <em>at</em>.</span></div>
+    <ol class="items" id="listB"></ol>
+  </section>
+
+  <section class="exercise" id="secC">
+    <div class="ex-head"><span class="ex-letter">C</span>
+      <span class="ex-instructions">Nhìn tranh và hoàn thành câu.</span></div>
+    <ol class="items" id="listC"></ol>
+  </section>
+
+  <section class="exercise" id="secD">
+    <div class="ex-head"><span class="ex-letter">D</span>
+      <span class="ex-instructions">Hoàn thành bằng các từ trong khung: <strong>at · in · on · to</strong></span></div>
+    <ol class="items" id="listD"></ol>
+  </section>
+
+  <section class="exercise" id="secE">
+    <div class="ex-head"><span class="ex-letter">E</span>
+      <span class="ex-instructions">Chọn từ đúng.</span></div>
+    <ol class="items" id="listE"></ol>
+  </section>
+
+  <section class="exercise" id="secF">
+    <div class="ex-head"><span class="ex-letter">F</span>
+      <span class="ex-instructions">Điền một từ vào mỗi chỗ trống.</span></div>
+    <div class="passage" id="passageF"></div>
+  </section>
+
+  <div class="submit-bar">
+    <button class="primary-btn" id="submitBtn">Nộp bài</button>
+    <button class="tool-btn" id="copyBtn" style="display:none;">Sao chép kết quả để gửi cho giáo viên</button>
+    <button class="tool-btn" id="resetBtn">Làm lại</button>
+  </div>
+
+  <div class="teacher-toggle"><a id="teacherLink">Dành cho giáo viên · xem bài nộp</a></div>
+  <div class="teacher-panel" id="teacherPanel">
+    <h2>Bài nộp của học sinh</h2>
+    <button class="tool-btn" id="refreshSubs" style="margin-bottom:12px;">Tải lại danh sách</button>
+    <div class="sub-list" id="subList">Đang tải...</div>
+  </div>
+
+  <footer class="note">Unit 8 · Prepositions — làm bài xong nhớ bấm "Nộp bài" nhé ✈</footer>
+</div>
+
+<script>
+/* ============ CONFIG ============ */
+const TEACHER_CODE = "MAI2026"; // đổi mã này nếu muốn
+let hasStorage = (typeof window.storage !== 'undefined');
+
+/* ============ DATA ============ */
+// Section A: {n, before, bold, after, correctWord}
+const dataA = [
+  {n:1, before:'We first visited China', bold:'on', after:'2006.', correctWord:'in'},
+  {n:2, before:'My birthday is', bold:'at', after:'the second of July.', correctWord:'on'},
+  {n:3, before:"Let's meet", bold:'on', after:'five o\u2019clock, shall we?', correctWord:'at'},
+  {n:4, before:'School starts again', bold:'in', after:'September.', correctWord:'in'},
+  {n:5, before:"There's a party at Emily's", bold:'at', after:'Saturday.', correctWord:'on'},
+  {n:6, before:'What do you want to do', bold:'on', after:'the morning?', correctWord:'in'},
+  {n:7, before:"Let's go and see Grandma", bold:'on', after:'Easter.', correctWord:'at'},
+  {n:8, before:'Where do you usually go', bold:'in', after:'Christmas Day?', correctWord:'on'},
+];
+const dataB = [
+  [1,'There are lots of people','the restaurant.','in'],
+  [2,'The people who live','number 44 are away on holiday.','at'],
+  [3,"You should go to the Louvre when you're",'Paris.','in'],
+  [4,'Gorillas live','forests in Africa and eat fruit.','in'],
+  [5,'What does that sign','the wall say?','on'],
+  [6,'What did Ethan say','his letter?','in'],
+  [7,'Have you heard of the strange statues','Easter Island?','on'],
+  [8,'Do you really want to spend the whole day','the beach?','on'],
+];
+const dataC = [
+  [1,'This photo was taken','winter.','in'],
+  [2,"We're",'a concert.','at'],
+  [3,"She's",'the sea.','in'],
+  [4,"It's",'page 62.','on'],
+  [5,"It's",'the middle.','in'],
+  [6,"He's",'an island.','on'],
+  [7,"It's",'the mountain.','on'],
+  [8,"They're",'a wedding.','at'],
+];
+const dataD = [
+  [1,'My aunt and uncle have decided to move','New Zealand.','to'],
+  [2,'Do you want to go','the theatre tomorrow?','to'],
+  [3,'We stayed','a great hotel in Dubai.','at/in'],
+  [4,"Wait",'the end of the street and I\u2019ll come and meet you.','at'],
+  [5,'You can come','my house for dinner, if you like.','to'],
+  [6,'Connor was walking','the corner shop when he realised he\u2019d lost his wallet.','to'],
+  [7,'We drove all night and finally arrived','Lisbon at eight o\u2019clock.','in'],
+  [8,'Did you leave your book','the teacher\u2019s desk, so she can see it?','on'],
+  [9,'Look at those sheep','that field over there.','in'],
+  [10,'It takes about six hours to fly','Asia from here.','to'],
+];
+const dataE = [
+  [1,"I'm meeting Andy",'the cinema in an hour.','at','on'],
+  [2,'Have you seen the new building','front of the school?','in','at'],
+  [3,'My new job starts','the first day of August.','on','in'],
+  [4,"We're going to Martin's to see their new baby",'Wednesday evening.','on','in'],
+  [5,'See if there are any tomatoes','the fridge, will you?','in','at'],
+  [6,"We'll all have computers connected to our brains",'the future.','in','at'],
+  [7,"I don't feel like playing chess",'the moment.','at','on'],
+  [8,"I think there's someone",'the door. I\u2019ll go and check.','at','in'],
+];
+const answersF = ['to','in','in','to','at','to','at','at','at','at','in'];
+
+let allQuestions = []; // {id, type, el(s), correct}
+
+function normalize(v){ return (v||'').trim().toLowerCase(); }
+function isCorrect(userVal, correctStr){
+  const accepted = correctStr.split('/').map(s=>normalize(s));
+  return accepted.includes(normalize(userVal));
+}
+
+function bumpFillProgress(){
+  const inputs = document.querySelectorAll('.blank-input');
+  const choicePairs = document.querySelectorAll('.choice-pair');
+  let filled = 0, total = inputs.length + choicePairs.length;
+  inputs.forEach(i => { if (i.value.trim() !== '') filled++; });
+  choicePairs.forEach(p => { if (p.dataset.selected) filled++; });
+  const pct = total ? Math.round((filled/total)*100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = filled + ' / ' + total + ' đã điền';
+}
+
+/* ---- build fill item with text input ---- */
+function buildFillItem(list, id, num, before, correctStr, after){
+  const li = document.createElement('li');
+  li.className = 'item';
+  li.innerHTML = `<span class="item-num">${num}</span>`;
+  const textSpan = document.createElement('span');
+  textSpan.className = 'item-text';
+  textSpan.appendChild(document.createTextNode(before + ' '));
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'blank-input';
+  input.dataset.id = id;
+  input.dataset.correct = correctStr;
+  input.autocomplete = 'off';
+  input.addEventListener('input', bumpFillProgress);
+  const tag = document.createElement('span');
+  tag.className = 'correct-tag';
+  textSpan.appendChild(input);
+  textSpan.appendChild(tag);
+  textSpan.appendChild(document.createTextNode(' ' + after));
+  li.appendChild(textSpan);
+  list.appendChild(li);
+  allQuestions.push({id, type:'text', input, tag, correct: correctStr});
+}
+
+/* ---- Section A ---- */
+const listA = document.getElementById('listA');
+dataA.forEach(d => buildFillItem(listA, 'A'+d.n, d.n, d.before + ' “' + d.bold + '”', d.correctWord, d.after));
+
+/* ---- Sections B, C, D ---- */
+const listB = document.getElementById('listB');
+dataB.forEach(([n,b,a,ans]) => buildFillItem(listB, 'B'+n, n, b, ans, a));
+const listC = document.getElementById('listC');
+dataC.forEach(([n,b,a,ans]) => buildFillItem(listC, 'C'+n, n, b, ans, a));
+const listD = document.getElementById('listD');
+dataD.forEach(([n,b,a,ans]) => buildFillItem(listD, 'D'+n, n, b, ans, a));
+
+/* ---- Section E: choice pair ---- */
+const listE = document.getElementById('listE');
+dataE.forEach(([n,before,after,correct,wrong]) => {
+  const li = document.createElement('li');
+  li.className = 'item';
+  li.innerHTML = `<span class="item-num">${n}</span>`;
+  const textSpan = document.createElement('span');
+  textSpan.className = 'item-text';
+  textSpan.appendChild(document.createTextNode(before + ' '));
+  const pair = document.createElement('span');
+  pair.className = 'choice-pair';
+  pair.dataset.correct = correct;
+  const options = Math.random() > 0.5 ? [correct, wrong] : [wrong, correct];
+  const btns = options.map(opt => {
+    const b = document.createElement('span');
+    b.className = 'choice';
+    b.textContent = opt;
+    b.addEventListener('click', () => {
+      if (pair.dataset.locked === 'true') return;
+      btns.forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      pair.dataset.selected = opt;
+      bumpFillProgress();
+    });
+    return b;
+  });
+  btns.forEach(b => pair.appendChild(b));
+  textSpan.appendChild(pair);
+  textSpan.appendChild(document.createTextNode(' ' + after));
+  li.appendChild(textSpan);
+  listE.appendChild(li);
+  allQuestions.push({id:'E'+n, type:'choice', pair, btns, correct});
+});
+
+/* ---- Section F: passage ---- */
+const passage = document.getElementById('passageF');
+const h3 = document.createElement('h3'); h3.textContent = 'Jetlag'; passage.appendChild(h3);
+
+function makeFInput(id, correct){
+  const input = document.createElement('input');
+  input.type='text'; input.className='blank-input'; input.style.width='56px';
+  input.dataset.id = id; input.dataset.correct = correct; input.autocomplete='off';
+  input.addEventListener('input', bumpFillProgress);
+  allQuestions.push({id, type:'text', input, tag:null, correct});
+  return input;
+}
+const p1 = document.createElement('p');
+p1.append('When you travel ', makeFInput('F1',answersF[0]), ' the other side of the world, jetlag is a real problem. You find yourself awake ', makeFInput('F2',answersF[1]), ' the middle of the night and you feel like going to bed ', makeFInput('F3',answersF[2]), ' the morning, just when everyone around you is getting up.');
+passage.appendChild(p1);
+const p2 = document.createElement('p');
+p2.append('Jetlag happens when you go ', makeFInput('F4',answersF[3]), ' a country where the time is very different. For example, you might leave London ', makeFInput('F5',answersF[4]), ' midday and fly ', makeFInput('F6',answersF[5]), ' Los Angeles. The flight takes about eleven hours, so when you arrive ', makeFInput('F7',answersF[6]), ' Los Angeles airport, your body thinks you\u2019re there ', makeFInput('F8',answersF[7]), ' 11 pm. But Los Angeles is eight hours behind London, so you actually get there ', makeFInput('F9',answersF[8]), ' 3 pm local time. So, ', makeFInput('F10',answersF[9]), ' midnight Los Angeles time, your body (which still thinks it\u2019s ', makeFInput('F11',answersF[10]), ' London) says it\u2019s 8 am. It takes a few days for your body clock to change.');
+passage.appendChild(p2);
+
+bumpFillProgress();
+
+/* ============ SUBMIT ============ */
+let submitted = false;
+document.getElementById('submitBtn').addEventListener('click', async () => {
+  const nameInput = document.getElementById('studentName');
+  const name = nameInput.value.trim();
+  if (!name){
+    nameInput.focus();
+    nameInput.style.borderColor = 'var(--err)';
+    return;
+  }
+  if (submitted) return;
+  submitted = true;
+
+  let correctCount = 0;
+  const total = allQuestions.length;
+  const details = [];
+
+  allQuestions.forEach(q => {
+    if (q.type === 'text'){
+      const userVal = q.input.value;
+      const ok = isCorrect(userVal, q.correct);
+      q.input.disabled = true;
+      q.input.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok){
+        if (q.tag){ q.tag.textContent = '→ ' + q.correct; q.tag.classList.add('show'); }
+        else {
+          const tag = document.createElement('span');
+          tag.className = 'correct-tag show';
+          tag.textContent = '→ ' + q.correct;
+          q.input.insertAdjacentElement('afterend', tag);
+        }
+      }
+      if (ok) correctCount++;
+      details.push({id:q.id, given:userVal||'(để trống)', correct:q.correct, ok});
+    } else {
+      const pair = q.pair;
+      pair.dataset.locked = 'true';
+      const selected = pair.dataset.selected || null;
+      const ok = selected === q.correct;
+      q.btns.forEach(b => {
+        b.classList.add('locked');
+        if (b.textContent === q.correct) b.classList.add('correct-final');
+        else if (b.textContent === selected) b.classList.add('wrong-final');
+      });
+      if (ok) correctCount++;
+      details.push({id:q.id, given:selected||'(chưa chọn)', correct:q.correct, ok});
+    }
+  });
+
+  document.getElementById('scoreText').textContent = correctCount + ' / ' + total;
+  document.getElementById('resultBanner').classList.add('show');
+  document.getElementById('submitBtn').disabled = true;
+  document.getElementById('submitBtn').textContent = 'Đã nộp bài';
+  document.getElementById('copyBtn').style.display = 'inline-block';
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  const record = {
+    name, score: correctCount, total,
+    submittedAt: new Date().toISOString(),
+    details
+  };
+
+  const noteEl = document.getElementById('storageNote');
+  if (hasStorage){
+    try{
+      const key = 'submissions:' + Date.now() + '_' + name.replace(/\s+/g,'_');
+      await window.storage.set(key, JSON.stringify(record), true);
+      noteEl.textContent = 'Bài nộp đã được gửi cho giáo viên.';
+    }catch(e){
+      hasStorage = false;
+      noteEl.textContent = 'Không gửi được tự động — hãy bấm "Sao chép kết quả" để gửi cho giáo viên qua Zalo/email.';
+    }
+  } else {
+    noteEl.textContent = 'Bài này đang mở ngoài Claude nên không tự gửi được — hãy bấm "Sao chép kết quả" để gửi cho giáo viên qua Zalo/email.';
+  }
+
+  window.__lastRecord = record;
+});
+
+document.getElementById('copyBtn').addEventListener('click', () => {
+  const r = window.__lastRecord;
+  if (!r) return;
+  let text = `Bài nộp Unit 8 - Prepositions\nHọ tên: ${r.name}\nĐiểm: ${r.score}/${r.total}\nThời gian: ${r.submittedAt}\n\nChi tiết:\n`;
+  r.details.forEach(d => {
+    text += `${d.id}: bạn điền "${d.given}" — đáp án đúng "${d.correct}" — ${d.ok ? 'ĐÚNG' : 'SAI'}\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copyBtn');
+    const original = btn.textContent;
+    btn.textContent = 'Đã sao chép!';
+    setTimeout(() => btn.textContent = original, 1800);
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => location.reload());
+
+/* ============ TEACHER PANEL ============ */
+document.getElementById('teacherLink').addEventListener('click', async () => {
+  const panel = document.getElementById('teacherPanel');
+  if (panel.classList.contains('show')){
+    panel.classList.remove('show');
+    return;
+  }
+  const code = prompt('Nhập mã giáo viên:');
+  if (code !== TEACHER_CODE) return;
+  panel.classList.add('show');
+  await loadSubmissions();
+});
+document.getElementById('refreshSubs').addEventListener('click', loadSubmissions);
+
+async function loadSubmissions(){
+  const container = document.getElementById('subList');
+  if (!hasStorage){
+    container.textContent = 'Không có kết nối lưu trữ trong phiên này (bài đang mở ngoài Claude, hoặc chưa có ai nộp qua đây). Học sinh có thể gửi kết quả đã sao chép qua Zalo/email.';
+    return;
+  }
+  container.textContent = 'Đang tải...';
+  try{
+    const list = await window.storage.list('submissions:', true);
+    if (!list || !list.keys || list.keys.length === 0){
+      container.textContent = 'Chưa có bài nộp nào.';
+      return;
+    }
+    const records = [];
+    for (const key of list.keys){
+      try{
+        const res = await window.storage.get(key, true);
+        if (res && res.value) records.push(JSON.parse(res.value));
+      }catch(e){ /* skip broken entries */ }
+    }
+    records.sort((a,b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+    container.innerHTML = '';
+    records.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'sub-row';
+      const dt = new Date(r.submittedAt);
+      row.innerHTML = `<span class="name">${r.name}</span><span class="meta">${r.score}/${r.total} · ${dt.toLocaleString('vi-VN')}</span>`;
+      const detail = document.createElement('div');
+      detail.className = 'sub-detail';
+      detail.innerHTML = r.details.map(d =>
+        `<div class="${d.ok?'ok-line':'wrong-line'}">${d.id}: "${d.given}" ${d.ok ? '✓' : '→ đúng: ' + d.correct}</div>`
+      ).join('');
+      row.addEventListener('click', () => detail.classList.toggle('show'));
+      container.appendChild(row);
+      container.appendChild(detail);
+    });
+  }catch(e){
+    container.textContent = 'Không tải được danh sách bài nộp.';
+  }
+}
+</script>
+
+</body>
+</html>
