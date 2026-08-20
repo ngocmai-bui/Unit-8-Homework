@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unit 3 · Fun and Games — Vocabulary Practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --navy: #141c45;
+    --navy-2: #232f72;
+    --coral: #F96167;
+    --coral-dim: #d94a50;
+    --gold: #F9E795;
+    --cream: #f4f6fb;
+    --split-bg: #1b234f;
+    --split-line: #0c1330;
+    --ok: #6fbf8b;
+    --err: #e2726f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    font-family:'Space Grotesk', sans-serif;
+    background: radial-gradient(circle at 20% 0%, #24307a 0%, var(--navy) 55%) fixed;
+    color: var(--cream);
+    padding: 40px 16px 80px;
+  }
+
+  .board{
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header.top{
+    text-align:center;
+    margin-bottom: 36px;
+  }
+  header.top .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing: 0.35em;
+    font-size: 11px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  header.top h1{
+    font-size: 34px;
+    margin: 10px 0 6px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  header.top p{
+    color: #c3cae8;
+    font-size: 14px;
+    margin: 0;
+  }
+  header.top .rule{
+    width: 60px; height: 3px; background: var(--coral);
+    margin: 18px auto 0; border-radius: 2px;
+  }
+
+  .progress-wrap{
+    display:flex; align-items:center; gap:12px;
+    background: var(--navy-2);
+    border: 1px solid #364391;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 30px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+  .progress-bar{
+    flex:1; height: 6px; background:#0d1338; border-radius: 4px; overflow:hidden;
+  }
+  .progress-fill{
+    height:100%; width:0%; background: linear-gradient(90deg, var(--coral-dim), var(--coral));
+    transition: width .35s ease;
+  }
+  #progressLabel{ white-space:nowrap; color:#d7ddf5; }
+
+  section.exercise{
+    background: var(--navy-2);
+    border: 1px solid #364391;
+    border-radius: 14px;
+    padding: 24px 24px 28px;
+    margin-bottom: 22px;
+    position: relative;
+  }
+
+  .ex-head{
+    display:flex; align-items:baseline; gap: 10px; margin-bottom: 6px;
+  }
+  .ex-letter{
+    font-family:'IBM Plex Mono', monospace;
+    background: var(--coral);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 14px;
+    width: 28px; height: 28px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius: 6px;
+    flex-shrink:0;
+  }
+  .ex-title{
+    font-weight: 700;
+    font-size: 15.5px;
+    color: var(--gold);
+  }
+  .ex-instructions{
+    font-size: 13.5px;
+    color: #cfd6f2;
+    margin: 0 0 16px 38px;
+  }
+  .ex-subhead{
+    font-family:'IBM Plex Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-size: 11.5px;
+    color: var(--gold);
+    margin: 18px 0 8px 0;
+  }
+
+  ol.items, .items-plain{
+    list-style: none;
+    margin: 0; padding: 0;
+  }
+  li.item{
+    display:flex;
+    align-items: baseline;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px dashed #2c398a;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+  li.item:last-child{ border-bottom:none; }
+  .item-num{
+    font-family:'IBM Plex Mono', monospace;
+    color: #8b96cf;
+    font-size: 12px;
+    width: 20px;
+    flex-shrink:0;
+    padding-top: 3px;
+  }
+  .item-text{ flex:1; }
+  .item-hint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--gold);
+    opacity: 0.85;
+    margin-left: 4px;
+  }
+
+  /* split-flap style blank (scoreboard flap) */
+  .blank{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width: 64px;
+    height: 30px;
+    padding: 0 10px;
+    background: var(--split-bg);
+    border: 1px solid #3a468f;
+    border-bottom: 2px solid var(--split-line);
+    border-radius: 5px;
+    font-family:'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 13px;
+    color: #7a85bd;
+    cursor: pointer;
+    user-select: none;
+    vertical-align: -6px;
+    letter-spacing: 0.06em;
+    transition: transform .15s ease, background .2s ease, color .2s ease, border-color .2s ease;
+    position: relative;
+  }
+  .blank:hover{ transform: translateY(-1px); border-color: var(--coral-dim); }
+  .blank.revealed{
+    color: var(--coral);
+    background: #232c5e;
+    border-color: var(--coral-dim);
+    cursor: default;
+  }
+  .blank.flip{
+    animation: flip .32s ease;
+  }
+  @keyframes flip{
+    0%{ transform: rotateX(0deg); }
+    45%{ transform: rotateX(90deg); }
+    55%{ transform: rotateX(90deg); }
+    100%{ transform: rotateX(0deg); }
+  }
+
+  /* bold word + verdict (Exercise I style) */
+  .bold-word{
+    font-weight: 700;
+    color: var(--coral);
+    padding: 2px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    border-bottom: 1px dotted var(--coral-dim);
+  }
+  .verdict{
+    display:inline-block;
+    margin-left: 8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .verdict.show{ opacity: 1; transform: translateY(0); }
+  .verdict.ok{ background: rgba(111,191,139,0.15); color: var(--ok); border: 1px solid rgba(111,191,139,0.4); }
+  .verdict.fix{ background: rgba(226,114,111,0.15); color: var(--err); border: 1px solid rgba(226,114,111,0.4); }
+
+  /* choice chips (2-way or 3-way, used for C and D) */
+  .choice-pair{
+    display:inline-flex;
+    gap: 6px;
+    vertical-align: middle;
+    flex-wrap: wrap;
+  }
+  .choice{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid #3a468f;
+    background: var(--split-bg);
+    color: #b0b8e6;
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+  .choice:hover{ border-color: var(--coral-dim); }
+  .choice.correct-picked{
+    background: rgba(111,191,139,0.18);
+    border-color: var(--ok);
+    color: var(--ok);
+  }
+  .choice.wrong-picked{
+    background: rgba(226,114,111,0.18);
+    border-color: var(--err);
+    color: var(--err);
+    text-decoration: line-through;
+  }
+  .choice.reveal-correct{
+    border-color: var(--ok);
+    color: var(--ok);
+  }
+  .choice.locked{ cursor: default; }
+
+  /* passage sections (G word formation, H dialogue) */
+  .passage{
+    font-size: 15px;
+    line-height: 2.15;
+  }
+  .passage .speaker{
+    font-weight: 700;
+    color: var(--gold);
+  }
+  .passage p{ margin: 0 0 10px 0; }
+
+  .toolbar{
+    display:flex; gap:10px; justify-content:center; margin: 30px 0 10px;
+    flex-wrap: wrap;
+  }
+  button.tool-btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12.5px;
+    background: var(--navy-2);
+    border: 1px solid #3a468f;
+    color: var(--cream);
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor:pointer;
+    transition: all .18s ease;
+  }
+  button.tool-btn:hover{ border-color: var(--coral); color: var(--coral); }
+
+  footer.note{
+    text-align:center;
+    font-size: 12px;
+    color: #8b96cf;
+    margin-top: 22px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  @media (max-width: 520px){
+    header.top h1{ font-size: 24px; }
+    section.exercise{ padding: 18px 16px 22px; }
+    li.item{ font-size: 14px; }
+    .ex-instructions{ margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="board">
+  <header class="top">
+    <div class="eyebrow">Scoreboard · Vocabulary Practice</div>
+    <h1>Fun and Games — Unit 3</h1>
+    <p>Click any blank, bold word, or choice to reveal the answer.</p>
+    <div class="rule"></div>
+  </header>
+
+  <div class="progress-wrap">
+    <span id="progressLabel">0 / 0 revealed</span>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <!-- SECTION A — Crossword clues -->
+  <section class="exercise" id="secA">
+    <div class="ex-head">
+      <span class="ex-letter">A</span>
+      <span class="ex-title">Topic vocabulary — Crossword clues</span>
+    </div>
+    <div class="ex-instructions">Click each blank to reveal the crossword answer.</div>
+    <div class="ex-subhead">Across</div>
+    <ol class="items" id="listA1"></ol>
+    <div class="ex-subhead">Down</div>
+    <ol class="items" id="listA2"></ol>
+  </section>
+
+  <!-- SECTION B — gap fill with word bank -->
+  <section class="exercise" id="secB">
+    <div class="ex-head">
+      <span class="ex-letter">B</span>
+      <span class="ex-title">Complete using the correct form</span>
+    </div>
+    <div class="ex-instructions">Word bank: <strong>beat · challenge · have fun · interest · organise · score · train</strong></div>
+    <ol class="items" id="listB"></ol>
+  </section>
+
+  <!-- SECTION C — circle the correct word -->
+  <section class="exercise" id="secC">
+    <div class="ex-head">
+      <span class="ex-letter">C</span>
+      <span class="ex-title">Circle the correct word</span>
+    </div>
+    <div class="ex-instructions">Click the word you think is correct.</div>
+    <ol class="items" id="listC"></ol>
+  </section>
+
+  <!-- SECTION D — multiple choice (phrasal verb particles) -->
+  <section class="exercise" id="secD">
+    <div class="ex-head">
+      <span class="ex-letter">D</span>
+      <span class="ex-title">Choose the correct answer</span>
+    </div>
+    <div class="ex-instructions">Click A, B or C.</div>
+    <ol class="items" id="listD"></ol>
+  </section>
+
+  <!-- SECTION E — one word gap (prepositions) -->
+  <section class="exercise" id="secE">
+    <div class="ex-head">
+      <span class="ex-letter">E</span>
+      <span class="ex-title">Write one word in each gap</span>
+    </div>
+    <div class="ex-instructions">Prepositional phrases.</div>
+    <ol class="items" id="listE"></ol>
+  </section>
+
+  <!-- SECTION F — word formation -->
+  <section class="exercise" id="secF">
+    <div class="ex-head">
+      <span class="ex-letter">F</span>
+      <span class="ex-title">Change the word in capitals</span>
+    </div>
+    <div class="ex-instructions">The word in capitals must fit the gap.</div>
+    <ol class="items" id="listF"></ol>
+  </section>
+
+  <!-- SECTION G — word formation passage -->
+  <section class="exercise" id="secG">
+    <div class="ex-head">
+      <span class="ex-letter">G</span>
+      <span class="ex-title">"The need to play" — word formation</span>
+    </div>
+    <div class="ex-instructions">Use the word in capitals to form the word that fits each gap.</div>
+    <div class="passage" id="passageG"></div>
+  </section>
+
+  <!-- SECTION H — dialogue, word patterns -->
+  <section class="exercise" id="secH">
+    <div class="ex-head">
+      <span class="ex-letter">H</span>
+      <span class="ex-title">Write one word in each gap — dialogue</span>
+    </div>
+    <div class="ex-instructions">Diana and Jenny — word patterns (adjective/verb + preposition).</div>
+    <div class="passage" id="passageH"></div>
+  </section>
+
+  <!-- SECTION I — find and correct the wrong word -->
+  <section class="exercise" id="secI">
+    <div class="ex-head">
+      <span class="ex-letter">I</span>
+      <span class="ex-title">Find and correct the wrong word</span>
+    </div>
+    <div class="ex-instructions">Click the word in capitals to reveal the correct preposition.</div>
+    <ol class="items" id="listI"></ol>
+  </section>
+
+  <div class="toolbar">
+    <button class="tool-btn" id="revealAllBtn">Reveal all answers</button>
+    <button class="tool-btn" id="resetBtn">Reset</button>
+  </div>
+
+  <footer class="note">Unit 3 · Fun and Games — vocabulary review, click to reveal ⚽ 🎮 🎵</footer>
+</div>
+
+<script>
+let totalBlanks = 0;
+let revealedCount = 0;
+
+function bumpProgress(){
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  const pct = totalBlanks ? Math.round((revealedCount/totalBlanks)*100) : 0;
+  fill.style.width = pct + '%';
+  label.textContent = revealedCount + ' / ' + totalBlanks + ' revealed';
+}
+
+function makeBlankSpan(answer){
+  totalBlanks++;
+  const span = document.createElement('span');
+  span.className = 'blank';
+  span.textContent = '·····';
+  span.dataset.answer = answer;
+  span.dataset.revealed = 'false';
+  span.addEventListener('click', () => {
+    if (span.dataset.revealed === 'true') return;
+    span.classList.add('flip');
+    setTimeout(() => {
+      span.textContent = answer;
+      span.classList.add('revealed');
+      span.dataset.revealed = 'true';
+      revealedCount++;
+      bumpProgress();
+    }, 160);
+    setTimeout(() => span.classList.remove('flip'), 320);
+  });
+  return span;
+}
+
+function buildFillItem(list, num, before, answer, after, hint){
+  const li = document.createElement('li');
+  li.className = 'item';
+  const numSpan = document.createElement('span');
+  numSpan.className = 'item-num';
+  numSpan.textContent = num;
+  const textSpan = document.createElement('span');
+  textSpan.className = 'item-text';
+  textSpan.appendChild(document.createTextNode(before + ' '));
+  textSpan.appendChild(makeBlankSpan(answer));
+  if (after) textSpan.appendChild(document.createTextNode(' ' + after));
+  if (hint){
+    const h = document.createElement('span');
+    h.className = 'item-hint';
+    h.textContent = hint;
+    textSpan.appendChild(h);
+  }
+  li.appendChild(numSpan);
+  li.appendChild(textSpan);
+  list.appendChild(li);
+}
+
+// choices: array of label strings, correctIndex: index of correct label. shuffle optional.
+function buildChoiceItem(list, num, before, after, choices, correctIndex, shuffle){
+  totalBlanks++;
+  const li = document.createElement('li');
+  li.className = 'item';
+  const numSpan = document.createElement('span');
+  numSpan.className = 'item-num';
+  numSpan.textContent = num;
+  const textSpan = document.createElement('span');
+  textSpan.className = 'item-text';
+  textSpan.appendChild(document.createTextNode(before + ' '));
+
+  const pair = document.createElement('span');
+  pair.className = 'choice-pair';
+
+  let order = choices.map((label, i) => ({label, correct: i === correctIndex}));
+  if (shuffle) order.sort(() => Math.random() - 0.5);
+
+  const btns = order.map(o => {
+    const b = document.createElement('span');
+    b.className = 'choice';
+    b.textContent = o.label;
+    b.dataset.correct = o.correct ? 'true' : 'false';
+    return b;
+  });
+  btns.forEach(b => {
+    b.addEventListener('click', () => {
+      if (pair.dataset.locked === 'true') return;
+      pair.dataset.locked = 'true';
+      btns.forEach(x => x.classList.add('locked'));
+      if (b.dataset.correct === 'true'){
+        b.classList.add('correct-picked');
+      } else {
+        b.classList.add('wrong-picked');
+        btns.find(x => x.dataset.correct === 'true').classList.add('reveal-correct');
+      }
+      revealedCount++;
+      bumpProgress();
+    });
+    pair.appendChild(b);
+  });
+
+  textSpan.appendChild(pair);
+  if (after) textSpan.appendChild(document.createTextNode(' ' + after));
+  li.appendChild(numSpan);
+  li.appendChild(textSpan);
+  list.appendChild(li);
+}
+
+function buildBoldWordItem(list, num, before, boldWord, after, isCorrect, fix){
+  totalBlanks++;
+  const li = document.createElement('li');
+  li.className = 'item';
+  const numSpan = document.createElement('span');
+  numSpan.className = 'item-num';
+  numSpan.textContent = num;
+  const textSpan = document.createElement('span');
+  textSpan.className = 'item-text';
+  textSpan.appendChild(document.createTextNode(before + ' '));
+
+  const boldSpan = document.createElement('span');
+  boldSpan.className = 'bold-word';
+  boldSpan.textContent = boldWord;
+
+  const verdict = document.createElement('span');
+  verdict.className = 'verdict';
+
+  boldSpan.addEventListener('click', () => {
+    if (boldSpan.dataset.done === 'true') return;
+    boldSpan.dataset.done = 'true';
+    if (isCorrect){
+      verdict.textContent = '✓ correct';
+      verdict.classList.add('ok');
+    } else {
+      verdict.textContent = '→ ' + fix;
+      verdict.classList.add('fix');
+    }
+    verdict.classList.add('show');
+    revealedCount++;
+    bumpProgress();
+  });
+
+  textSpan.appendChild(boldSpan);
+  if (after) textSpan.appendChild(document.createTextNode(' ' + after));
+  textSpan.appendChild(verdict);
+  li.appendChild(numSpan);
+  li.appendChild(textSpan);
+  list.appendChild(li);
+}
+
+/* ============ SECTION A — Crossword clues ============ */
+const dataAcross = [
+  [1, "If he wins this match, he'll be the world", "!", "champion"],
+  [4, "I'm thinking of joining a", "to get more exercise.", "gym"],
+  [5, "Our basketball", "said that I can play on Saturday!", "coach"],
+  [8, "The", "blew his whistle and the game started.", "referee"],
+  [9, "Which team do you", "?", "support"],
+  [11, "Mark's band play traditional", "music — they often perform at country fairs and festivals.", "folk"],
+];
+const dataDown = [
+  [2, "I'm sorry, but you have to be a", "of the golf club to play here.", "member"],
+  [3, "My", "was a brilliant player and I didn't manage to win the match.", "opponent"],
+  [6, "Tom is really good at cards. He would never", "!", "cheat"],
+  [7, "Lisa's", "has just reached number one with their new song!", "group"],
+  [10, "I took a big", "by doing the parachute jump, but I loved every second of it!", "risk"],
+];
+const listA1 = document.getElementById('listA1');
+const listA2 = document.getElementById('listA2');
+dataAcross.forEach(([n,b,a,ans]) => buildFillItem(listA1, n, b, ans, a));
+dataDown.forEach(([n,b,a,ans]) => buildFillItem(listA2, n, b, ans, a));
+
+/* ============ SECTION B — gap fill ============ */
+const dataB = [
+  [1, "Do you dream of", "the winning goal in a football match,", "scoring"],
+  [2, "or", "a top tennis player?", "beating"],
+  [3, "Sport", "most young people, and it's a great way to stay healthy", "interests"],
+  [4, "and", "at the same time.", "have fun"],
+  [5, "That's why the local council has decided to help young people who want to", "their own sports club.", "organise"],
+  [6, "We know it's a big", ", and that's why we'll give you the money you need to get started.", "challenge"],
+  [7, "We'll help you find a place to", "and give you money to find good players in your area.", "train"],
+];
+const listB = document.getElementById('listB');
+dataB.forEach(([n,b,a,ans]) => buildFillItem(listB, n, b, ans, a));
+
+/* ============ SECTION C — circle the correct word ============ */
+const dataC = [
+  [1, "I really like playing", "games like Monopoly and Cluedo.", ["board","video"], 0],
+  [2, "Roy was the best player, so he wasn't surprised when he became", "of the team.", ["club","captain"], 1],
+  [3, "Lots of people get", "from just watching sport from their armchairs.", ["defeat","pleasure"], 1],
+  [4, "I thought the music at the", "we went to last night was great.", ["rhythm","concert"], 1],
+  [5, "Everyone in my family supports the same", ".", ["competition","team"], 1],
+  [6, "I find", "music really boring, and I prefer pop.", ["classical","entertaining"], 0],
+];
+const listC = document.getElementById('listC');
+dataC.forEach(([n,b,a,choices,ci]) => buildChoiceItem(listC, n, b, a, choices, ci, true));
+
+/* ============ SECTION D — multiple choice ============ */
+const dataD = [
+  [1, "You should take", "a sport and then you would get more exercise.", ["A off","B up","C down"], 1],
+  [2, "I'm trying to work! Could you please turn your music", "?", ["A down","B in","C out"], 0],
+  [3, "Just ask and I'm sure the other children will let you join", ".", ["A out","B up","C in"], 2],
+  [4, "The referee sent David", "for arguing with him.", ["A off","B down","C up"], 0],
+  [5, "This is my favourite song! Turn it", "!", ["A off","B out","C up"], 2],
+  [6, "A mobile phone rang, but the musician just carried", "playing.", ["A on","B up","C in"], 0],
+  [7, "We can't afford to eat", "very often.", ["A off","B up","C out"], 2],
+  [8, "I've decided to become a vegetarian and give", "meat.", ["A up","B off","C out"], 0],
+];
+const listD = document.getElementById('listD');
+dataD.forEach(([n,b,a,choices,ci]) => buildChoiceItem(listD, n, b, a, choices, ci, false));
+
+/* ============ SECTION E — one word gap ============ */
+const dataE = [
+  [1, "We were waiting outside the stadium", "a long time before they finally let us in.", "for"],
+  [2, "I've got that concert", "DVD — it's fantastic!", "on"],
+  [3, "I ran all the way home and I was just", "time for my favourite programme.", "in"],
+  [4, "Everyone clapped when the singer came", "stage.", "on"],
+  [5, "At the cinema, Mum sat on the right, Dad sat on the left and I sat", "the middle.", "in"],
+  [6, "Ed doesn't want to become a professional footballer. He just does it", "fun.", "for"],
+];
+const listE = document.getElementById('listE');
+dataE.forEach(([n,b,a,ans]) => buildFillItem(listE, n, b, ans, a));
+
+/* ============ SECTION F — word formation ============ */
+const dataF = [
+  [1, "What's the name of that", "you were singing earlier?", "song", "SING"],
+  [2, "I don't think I've got much", "talent, to be honest.", "musical", "MUSIC"],
+  [3, "My dad used to be really fit and was on his college", "team.", "athletics", "ATHLETE"],
+  [4, "When you were young, did you ever play in the street with other local", "?", "children", "CHILD"],
+  [5, "Alan is studying to be an", ", but I don't think he's enjoying it.", "actor", "ACT"],
+  [6, "They have a wonderful", "of old toys at the museum in town.", "collection", "COLLECT"],
+  [7, "My grandad loves to", "and we often go out on his boat.", "sail", "SAIL"],
+  [8, "You have to practise a lot if you want to work as a", ".", "musician", "MUSIC"],
+];
+const listF = document.getElementById('listF');
+dataF.forEach(([n,b,a,ans,cap]) => buildFillItem(listF, n, b, ans, a, '[' + cap + ']'));
+
+/* ============ SECTION G — word formation passage ============ */
+const passageG = document.getElementById('passageG');
+const pG1 = document.createElement('p');
+pG1.appendChild(document.createTextNode('Why are kittens such '));
+pG1.appendChild(makeBlankSpan('playful'));
+const hintG1 = document.createElement('span'); hintG1.className='item-hint'; hintG1.textContent='[PLAY]';
+pG1.appendChild(hintG1);
+pG1.appendChild(document.createTextNode(' animals? They love chasing a ball or a piece of wool, and they always play in a very '));
+pG1.appendChild(makeBlankSpan('athletic'));
+const hintG2 = document.createElement('span'); hintG2.className='item-hint'; hintG2.textContent='[ATHLETE]';
+pG1.appendChild(hintG2);
+pG1.appendChild(document.createTextNode(' way.'));
+passageG.appendChild(pG1);
+
+const pG2 = document.createElement('p');
+pG2.appendChild(document.createTextNode("But why? All of a kitten's "));
+pG2.appendChild(makeBlankSpan('actions'));
+const hintG3 = document.createElement('span'); hintG3.className='item-hint'; hintG3.textContent='[ACT]';
+pG2.appendChild(hintG3);
+pG2.appendChild(document.createTextNode(' when playing are, in fact, important for the future. It might look like '));
+pG2.appendChild(makeBlankSpan('entertainment'));
+const hintG4 = document.createElement('span'); hintG4.className='item-hint'; hintG4.textContent='[ENTERTAIN]';
+pG2.appendChild(hintG4);
+pG2.appendChild(document.createTextNode(', but the kitten is practising its hunting skills.'));
+passageG.appendChild(pG2);
+
+const pG3 = document.createElement('p');
+pG3.appendChild(document.createTextNode('That '));
+pG3.appendChild(makeBlankSpan('heroic'));
+const hintG5 = document.createElement('span'); hintG5.className='item-hint'; hintG5.textContent='[HERO]';
+pG3.appendChild(hintG5);
+pG3.appendChild(document.createTextNode(' jump onto a toy teaches the kitten a lot. Think about your own '));
+pG3.appendChild(makeBlankSpan('childhood'));
+const hintG6 = document.createElement('span'); hintG6.className='item-hint'; hintG6.textContent='[CHILD]';
+pG3.appendChild(hintG6);
+pG3.appendChild(document.createTextNode(" and you'll see that you learnt a lot through play."));
+passageG.appendChild(pG3);
+
+/* ============ SECTION H — dialogue ============ */
+const passageH = document.getElementById('passageH');
+const pH1 = document.createElement('p');
+const spkD1 = document.createElement('span'); spkD1.className='speaker'; spkD1.textContent='Diana: ';
+pH1.appendChild(spkD1);
+pH1.appendChild(document.createTextNode("Hello, is that Jenny? I'm bored "));
+pH1.appendChild(makeBlankSpan('with'));
+pH1.appendChild(document.createTextNode(' watching TV and I felt '));
+pH1.appendChild(makeBlankSpan('like'));
+pH1.appendChild(document.createTextNode(' a chat. What are you doing?'));
+passageH.appendChild(pH1);
+
+const pH2 = document.createElement('p');
+const spkJ1 = document.createElement('span'); spkJ1.className='speaker'; spkJ1.textContent='Jenny: ';
+pH2.appendChild(spkJ1);
+pH2.appendChild(document.createTextNode("Hi, Diana. Well, I'm reading a book "));
+pH2.appendChild(makeBlankSpan('by'));
+pH2.appendChild(document.createTextNode(' a Russian writer. It\u2019s '));
+pH2.appendChild(makeBlankSpan('about'));
+pH2.appendChild(document.createTextNode(' how to become a great actor.'));
+passageH.appendChild(pH2);
+
+const pH3 = document.createElement('p');
+const spkD2 = document.createElement('span'); spkD2.className='speaker'; spkD2.textContent='Diana: ';
+pH3.appendChild(spkD2);
+pH3.appendChild(document.createTextNode('Really? Oh, I\u2019m really interested '));
+pH3.appendChild(makeBlankSpan('in'));
+pH3.appendChild(document.createTextNode(' acting. Tell me about it.'));
+passageH.appendChild(pH3);
+
+const pH4 = document.createElement('p');
+const spkJ2 = document.createElement('span'); spkJ2.className='speaker'; spkJ2.textContent='Jenny: ';
+pH4.appendChild(spkJ2);
+pH4.appendChild(document.createTextNode('He says it takes a long time to get good '));
+pH4.appendChild(makeBlankSpan('at'));
+pH4.appendChild(document.createTextNode(' acting. To become popular '));
+pH4.appendChild(makeBlankSpan('with'));
+pH4.appendChild(document.createTextNode(' the public, you need to really understand people.'));
+passageH.appendChild(pH4);
+
+const pH5 = document.createElement('p');
+const spkD3 = document.createElement('span'); spkD3.className='speaker'; spkD3.textContent='Diana: ';
+pH5.appendChild(spkD3);
+pH5.appendChild(document.createTextNode('That sounds just like me! Tell me more. What else does he say?'));
+passageH.appendChild(pH5);
+
+/* ============ SECTION I — find and correct the wrong word ============ */
+const dataI = [
+  [1, "I'm completely crazy", "WITH", "skateboarding! I love it!", false, "about"],
+  [2, "In my free time I listen", "ON", "music on CD or on the radio.", false, "to"],
+  [3, "Elsa isn't very keen", "FOR", "this group, but they're one of my favourites.", false, "on"],
+  [4, "Next week we've got a game", "TO", "a team from Hungary.", false, "against"],
+  [5, "Is that Kylie? Oh, I'm a really big fan", "FROM", "hers.", false, "of"],
+  [6, "I was really scared when I took part", "TO", "the singing competition last year.", false, "in"],
+];
+const listI = document.getElementById('listI');
+dataI.forEach(([n,b,bold,a,ok,fix]) => buildBoldWordItem(listI, n, b, bold, a, ok, fix));
+
+bumpProgress();
+
+/* ---------- Toolbar ---------- */
+document.getElementById('revealAllBtn').addEventListener('click', () => {
+  document.querySelectorAll('.blank:not(.revealed)').forEach(b => b.click());
+  document.querySelectorAll('.bold-word').forEach(b => { if(b.dataset.done !== 'true') b.click(); });
+  document.querySelectorAll('.choice-pair').forEach(pair => {
+    if (pair.dataset.locked !== 'true') pair.querySelector('.choice').click();
+  });
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  location.reload();
+});
+</script>
+
+</body>
+</html>
